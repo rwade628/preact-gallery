@@ -3,9 +3,9 @@ import { connect } from 'preact-redux';
 import reduce from '../../redux/reducers';
 import * as actions from '../../redux/actions';
 
-import Gallery from '../../components/Gallery'
-import Preview from '../../components/Preview'
-import Item from '../../components/Item'
+import Gallery from '../../components/gallery'
+import Preview from '../../components/preview'
+import Item from '../../components/item'
 
 @connect(reduce, actions)
 export default class PhotoGallery extends Component {

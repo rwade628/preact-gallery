@@ -4,7 +4,7 @@ import { route } from 'preact-router';
 import reduce from '../../redux/reducers';
 import * as actions from '../../redux/actions';
 
-import Gallery from '../../components/Gallery'
+import Gallery from '../../components/gallery'
 
 @connect(reduce, actions)
 export default class AlbumGallery extends Component {
