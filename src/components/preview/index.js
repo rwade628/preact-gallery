@@ -1,5 +1,9 @@
 import { h, Component } from 'preact';
+import { connect } from 'preact-redux';
+import reduce from '../../redux/reducers';
+import * as actions from '../../redux/actions';
 
+@connect(reduce, actions)
 export default class Preview extends Component {
 	constructor() {
 		super()
@@ -53,7 +57,8 @@ export default class Preview extends Component {
 	 //    });
 	    // this.setState({image: this.props.results[this.props.selected.index]})
 	}
-	render() {
+	render({selected}) {
+		const visible = selected === null ? '' : 'visible';
 		return (
 			<div id="preview" className={visible} ref={(el) => this.container = el}>
 				{this.props.children}
