@@ -19,7 +19,7 @@ export default class PhotoGallery extends Component {
 	}
 
 	onClick = (event, obj) => {
-		console.log('clicked')
+		console.log('clicked', this.props.gallery[obj.index])
 		this.props.setSelected(this.props.gallery[obj.index])
 	}
 

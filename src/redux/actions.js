@@ -11,9 +11,9 @@ export function getAlbums() {
 	};
 }
 
-export function setSelected(selected) {
+export function setSelected(selectedItem) {
 	return {
 		type: 'SET_SELECTED',
-		selected
+		selectedItem
 	};
 }
