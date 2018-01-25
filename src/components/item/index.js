@@ -7,8 +7,7 @@ let scale = 1,
 	maxScale,
 	minScale,
 	selectedWidth = 0,
-	selectedHeight = 0,
-	tapTimeout
+	selectedHeight = 0
 
 const dragMoveListener = event => {
 	var target = event.target,
@@ -129,10 +128,6 @@ export default class Item extends Component {
 		this.interact.draggable(this.draggableOptions)
 		this.interact.gesturable(this.gesturableOptions)
 		this.interact.on('doubletap', this.doubleTap)
-		this.interact.on('tap', event => {
-			if (event.double) { return; }
-			tapTimeout = setTimeout(() => this.hide(), 500)
-		})
 		interact(parent).on('down', event => {
 			event.preventDefault();
 		})
@@ -147,10 +142,6 @@ export default class Item extends Component {
 				this.interact.draggable(this.draggableOptions)
 				this.interact.gesturable(this.gesturableOptions)
 				this.interact.on('doubletap', this.doubleTap)
-				this.interact.on('tap', event => {
-					if (event.double) { return; }
-					tapTimeout = setTimeout(() => this.hide(), 500)
-				})
 			}
 			let maxWidth = document.documentElement.clientWidth;
 			let maxHeight = document.documentElement.clientHeight;
@@ -178,8 +169,6 @@ export default class Item extends Component {
 	}
 
 	doubleTap = (event) => {
-		clearTimeout(tapTimeout)
-
 		scale = originalScale
 		let maxWidth = document.documentElement.clientWidth;
 		let maxHeight = document.documentElement.clientHeight;
@@ -196,15 +185,13 @@ export default class Item extends Component {
 	
 	hide = () => {
 		scale = originalScale = maxScale = minScale = 1,
-		selectedWidth = selectedHeight = 0,
-		clearTimeout(tapTimeout)
+		selectedWidth = selectedHeight = 0;
 		if (this.props.hide) {
 			this.props.hide();
 		}
 	}
 
 	onSwipe = (direction) => {
-		console.log('swiped')
 		//call parent swipe if given
 		if (this.props.onSwipe) {
 			this.props.onSwipe(direction);

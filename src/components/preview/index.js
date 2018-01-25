@@ -19,45 +19,35 @@ export default class Preview extends Component {
 				}
 			}
 		}
+		this.tapTimeout
 	}
 
 	componentDidMount() {
 		let imageObj = document.getElementById("preview")
 		this.interact = interact(imageObj)
 		this.interact.draggable(this.draggableOptions)
+		this.interact.on('tap', event => {
+			if (event.double || event.target.localName === 'video') { 
+				clearTimeout(this.tapTimeout)
+				return; 
+			}
+			this.tapTimeout = setTimeout(() => this.hide(), 500)
+		})
 	}
 
-	// componentWillUpdate({selected}) {
-	// 	if (selected != void 0 && selected != this.props.selected && selected.type === 'image') {
-	// 		this.setState({image: this.props.results[selected.index]})
-	// 	}
-	// }
-
 	hide = () => {
-		this.props.setSelected(null);
+		this.props.setSelected({})
 	}
 
 	onSwipe = (direction) => {
 		console.log('direction', direction)
-		// let index = this.props.selected.index;
-		// if (direction === 'right') {
-		// 	if (index === 0) {
-		// 		index = this.props.results.length - 1;
-		// 	} else {
-		// 		index = this.props.selected.index - 1;
-		// 	}
-		// } else if (direction === 'left') {
-		// 	if (index === this.props.results.length - 1) {
-		// 		index = 0;
-		// 	} else {
-		// 		index = this.props.selected.index + 1;
-		// 	}
-		// }
-		// this.props.setSelected(this.props.gallery[index]);
+		if (this.props.onSwipe) {
+			this.props.onSwipe(direction);
+		}
 	}
+
 	render({selected}) {
-		console.log(selected)
-		const visible = selected.hasOwnProperty('src') ? 'visible' : ''
+		const visible = selected.hasOwnProperty('image') ? 'visible' : ''
 		return (
 			<div id="preview" className={visible} ref={(el) => this.container = el}>
 				{this.props.children}
