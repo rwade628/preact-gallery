@@ -19,6 +19,7 @@ const dragMoveListener = event => {
 	target.style.webkitTransform =
 	target.style.transform =
 	'translate3d(' + x + 'px, ' + y + 'px, 0) scale(' + scale + ')'
+
 	// update the posiion attributes
 	target.setAttribute('data-x', x)
 	target.setAttribute('data-y', y)
@@ -41,8 +42,8 @@ const restrictListener = (x, y, element) => {
     return {
         left: restriction.left,
         right: restriction.left + restriction.width,
-        top: restriction.top,
-        bottom: restriction.top + restriction.height
+        top: restriction.top + window.scrollY,
+        bottom: restriction.top + restriction.height + window.scrollY
     }
 }
 
@@ -82,6 +83,7 @@ const gestureListener = event => {
 	}
 }
 
+
 export default class Item extends Component {
 
 	constructor() {
@@ -95,17 +97,16 @@ export default class Item extends Component {
 			    elementRect: { top: 0, left: 0, bottom: 1, right: 1 }
 			},
 			onmove: event => {
-				dragMoveListener(event)
+				if (scale != originalScale) {
+					dragMoveListener(event)	
+				}
 				event.preventDefault()
 			},
 			oninertiastart: event => {
-				if (scale === originalScale && event.swipe && (event.swipe.left || event.swipe.right) && Math.abs(event.swipe.velocity.x) > 3000) {
-					let direction = event.swipe.left ? 'left': 'right'
+				if (scale === originalScale && Math.abs(event.velocityX) > 20) {
+					let direction = event.velocityX < 0 ? 'left' : 'right'
 					this.onSwipe(direction)
 				}
-			},
-			onend: event => {
-				console.log('here?')
 			}
 		}
 		this.gesturableOptions = {
@@ -127,33 +128,38 @@ export default class Item extends Component {
 		this.interact = interact(imageObj)
 		this.interact.draggable(this.draggableOptions)
 		this.interact.gesturable(this.gesturableOptions)
+		this.interact.on('doubletap', this.doubleTap)
 		this.interact.on('tap', event => {
-			if (event.shiftKey || event.altKey) {
-				this.zoom(event)
-			} else {
-				if (event.double) { return; }
-				tapTimeout = setTimeout(() => this.hide(), 500)
-			}
-			
+			if (event.double) { return; }
+			tapTimeout = setTimeout(() => this.hide(), 500)
 		})
-		// .on('doubletap', this.doubleTap)
-		.on('down', function (event) {
+		interact(parent).on('down', event => {
 			event.preventDefault();
 		})
 	}
 
 	componentWillUpdate({image}) {
 		if (image) {
+			let imageObj = document.getElementById("image")
+			if (this.interact) {
+				this.interact.unset()
+				this.interact = interact(imageObj)
+				this.interact.draggable(this.draggableOptions)
+				this.interact.gesturable(this.gesturableOptions)
+				this.interact.on('doubletap', this.doubleTap)
+				this.interact.on('tap', event => {
+					if (event.double) { return; }
+					tapTimeout = setTimeout(() => this.hide(), 500)
+				})
+			}
 			let maxWidth = document.documentElement.clientWidth;
 			let maxHeight = document.documentElement.clientHeight;
 			selectedWidth = image.width;
 			selectedHeight = image.height;
-			
 			scale = originalScale = Math.min(maxWidth / selectedWidth, maxHeight / selectedHeight);
-			maxScale = scale * 2 > 1 ? scale * 2 : 1
+			maxScale = 3
 			minScale = scale * .5 < .5 ? scale : .5
 
-			let imageObj = document.getElementById("image")
 			imageObj.style.webkitTransformOrigin =
 			imageObj.style.transformOrigin =
 				'top left'
@@ -171,55 +177,18 @@ export default class Item extends Component {
 	componentWillUnmount() {
 	}
 
-	zoom = (event) => {
-		let currentX = parseFloat(event.target.getAttribute('data-x')) || 0
-		let currentY = parseFloat(event.target.getAttribute('data-y')) || 0
-		var coef = event.altKey ? 0.9 : 1.05
-        var delm = document.documentElement
-        var oz = scale
-        var nz = scale * coef
-        /// scroll offset
-        var sx = delm.scrollLeft
-        var sy = delm.scrollTop
-        /// offset of container
-        var ox = 0//50 + 21,
-        var oy = 0//50 + 22,
-        /// mouse cords
-        var mx = event.clientX - ox + sx
-        var my = event.clientY - oy + sy
-        /// calculate click at current zoom
-        var ix = (mx - currentX) / oz
-        var iy = (my - currentY) / oz
-        /// calculate click at new zoom
-        var nx = ix * nz
-        var ny = iy * nz
-        /// move to the difference
-        /// make sure we take mouse pointer offset into account!
-        var cx = (ix + (mx - ix) - nx)
-        var cy = (iy + (my - iy) - ny)
-
-        event.target.style.webkitTransform =
-		event.target.style.transform =
-			'translate3d(' + cx + 'px, ' + cy + 'px, 0) scale(' + nz + ')'
-
-		scale = nz
-		event.target.setAttribute('data-x', cx)
-		event.target.setAttribute('data-y', cy)
-	}
-
 	doubleTap = (event) => {
-		console.log('doubletap')
 		clearTimeout(tapTimeout)
 
 		scale = originalScale
 		let maxWidth = document.documentElement.clientWidth;
 		let maxHeight = document.documentElement.clientHeight;
 		let imageObj = document.getElementById("image")
-		let x = maxWidth / 2 - selectedWidth / 2
-		let y = maxHeight / 2 - selectedHeight / 2
+		let x = maxWidth / 2 - (selectedWidth * scale) / 2
+		let y = maxHeight / 2 - (selectedHeight * scale) / 2
 		imageObj.style.webkitTransform =
 		imageObj.style.transform =
-		'translate(' + x + 'px, ' + y + 'px) scale(' + scale + ')';
+		'translate3d(' + x + 'px, ' + y + 'px, 0) scale(' + scale + ')';
 
 		imageObj.setAttribute('data-x', x);
 		imageObj.setAttribute('data-y', y);
@@ -228,20 +197,26 @@ export default class Item extends Component {
 	hide = () => {
 		scale = originalScale = maxScale = minScale = 1,
 		selectedWidth = selectedHeight = 0,
-		tapTimeout = null
+		clearTimeout(tapTimeout)
 		if (this.props.hide) {
 			this.props.hide();
 		}
 	}
 
 	onSwipe = (direction) => {
+		console.log('swiped')
 		//call parent swipe if given
 		if (this.props.onSwipe) {
 			this.props.onSwipe(direction);
 		}
 	}
 
-	render({image}) {
-		return <img id="image" src={image.src} />;
+	render() {
+		if (this.props.image === void 0) {
+			this.props.image = {
+				src: ''
+			}
+		}
+		return <img id="image" src={this.props.image.src} />;
 	}
 }

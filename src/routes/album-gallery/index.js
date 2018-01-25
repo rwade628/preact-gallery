@@ -14,7 +14,7 @@ export default class AlbumGallery extends Component {
 	}
 
 	componentDidMount() {
-		this.props.getAlbums();
+		this.props.getAlbums('images');
 	}
 
 	onClick(event, obj) {

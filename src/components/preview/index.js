@@ -53,11 +53,7 @@ export default class Preview extends Component {
 		// 		index = this.props.selected.index + 1;
 		// 	}
 		// }
-		// this.props.setSelected({
-	 //      type: this.props.selected.type,
-	 //      index: index
-	 //    });
-	    // this.setState({image: this.props.results[this.props.selected.index]})
+		// this.props.setSelected(this.props.gallery[index]);
 	}
 	render({selected}) {
 		console.log(selected)
