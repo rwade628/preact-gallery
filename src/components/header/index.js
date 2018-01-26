@@ -1,5 +1,8 @@
 import { h, Component } from 'preact';
 import { route } from 'preact-router';
+import { connect } from 'preact-redux';
+import reduce from '../../redux/reducers';
+import * as actions from '../../redux/actions';
 import Toolbar from 'preact-material-components/Toolbar';
 import Drawer from 'preact-material-components/Drawer';
 import List from 'preact-material-components/List';
@@ -15,11 +18,38 @@ import 'preact-material-components/Toolbar/style.css';
 import 'preact-material-components/Menu/style.css';
 import 'preact-material-components/Button/style.css';
 
+class GalleryMenu extends Component {
+	render() {
+		return (
+			<Menu.Anchor>
+				<Toolbar.Icon sort onClick={e => {
+					this.menu.MDComponent.open = true;
+				}}
+				>
+					sort
+				</Toolbar.Icon>
+				<Menu
+					ref={menu => {
+					  this.menu = menu;
+					}}
+					>
+					<Menu.Item>Hello1</Menu.Item>
+					<Menu.Item>Hello2</Menu.Item>
+					<Menu.Item>Hello3</Menu.Item>
+				</Menu>
+	        </Menu.Anchor>
+        )
+	}
+}
+
+@connect(reduce, actions)
 export default class Header extends Component {
+
 	componentDidMount() {
 		document.body.classList.add('mdc-theme--dark');
 		document.getElementById('outer').classList.add('mdc-theme--dark');
 	}
+
 	closeDrawer() {
 		this.drawer.MDComponent.open = false;
 	}
@@ -40,36 +70,21 @@ export default class Header extends Component {
 	goToMyProfile = this.linkTo('/profile');
 	goToGallery = this.linkTo('/albums')
 
-	render() {
-		// let toolbarOption
-		// switch(this.props.location.pathname) {
-		//     case '/':
-		//         toolbarOption = <Toolbar.Icon onClick={this.openSettings}>settings</Toolbar.Icon>
-		//         break;
-		//     case '/gallery':
-		//         toolbarOption = `
-		// 			<Menu.Anchor>
-		// 				<Toolbar.Icon settings onClick={e => {
-		// 					this.menu.MDComponent.open = true;
-		// 				}}
-		// 				>
-		// 					settings
-		// 				</Toolbar.Icon>
-		// 				<Menu
-		// 					ref={menu => {
-		// 					  this.menu = menu;
-		// 					}}
-		// 					>
-		// 					<Menu.Item>Hello1</Menu.Item>
-		// 					<Menu.Item>Hello2</Menu.Item>
-		// 					<Menu.Item>Hello3</Menu.Item>
-		// 				</Menu>
-		// 	        </Menu.Anchor>`
-		//         break;
-		//     default:
-		// 		toolbarOption = `<Toolbar.Icon onClick={this.openSettings}>settings</Toolbar.Icon>`
-		// }
+	getMenuOption = () => {
+		console.log(this.props.menu)
+		switch(this.props.menu) {
+		    case 'root':
+		        return <Toolbar.Icon onClick={this.openSettings}>settings</Toolbar.Icon>
+		        break;
+		    case 'gallery':
+		        return <GalleryMenu />
+		        break;
+		    default:
+				return <Toolbar.Icon onClick={this.openSettings}>settings</Toolbar.Icon>
+		}
+	}
 
+	render() {
 		return (
 			<div>
 				<Toolbar className="toolbar">
@@ -79,6 +94,9 @@ export default class Header extends Component {
 								menu
 							</Toolbar.Icon>
 							<Toolbar.Title>Preact app</Toolbar.Title>
+						</Toolbar.Section>
+						<Toolbar.Section align-end>
+							{this.getMenuOption()}
 						</Toolbar.Section>
 					</Toolbar.Row>
 				</Toolbar>

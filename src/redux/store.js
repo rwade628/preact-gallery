@@ -16,13 +16,18 @@ let ACTIONS = {
 	SET_SELECTED: ({ selected, ...state }, {selectedItem}) => ({
 		selected: selectedItem,
 		...state
+	}),
+	SET_MENU: ({menu, ...state}, {menuState}) => ({
+		menu: menuState,
+		...state
 	})
 };
 
 const INITIAL = {
 	gallery: [],
 	albums: [],
-	selected: {}
+	selected: {},
+	menu: 'root'
 };
 
 export default createStore( (state, action) => (

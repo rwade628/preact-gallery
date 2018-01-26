@@ -1,10 +1,17 @@
 import { h, Component } from 'preact';
+import { connect } from 'preact-redux';
+import reduce from '../../redux/reducers';
+import * as actions from '../../redux/actions';
 import Card from 'preact-material-components/Card';
 import 'preact-material-components/Card/style.css';
 import 'preact-material-components/Button/style.css';
 import style from './style';
 
+@connect(reduce, actions)
 export default class Home extends Component {
+	componentDidMount() {
+		this.props.setMenuState('root')
+	}
 	render() {
 		return (
 			<div class={style.home}>

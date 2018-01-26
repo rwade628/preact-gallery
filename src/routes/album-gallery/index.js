@@ -15,6 +15,7 @@ export default class AlbumGallery extends Component {
 
 	componentDidMount() {
 		this.props.getAlbums('images');
+		this.props.setMenuState('gallery')
 	}
 
 	onClick(event, obj) {

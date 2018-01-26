@@ -48,3 +48,10 @@ export function setSelected(selectedItem) {
 		selectedItem
 	};
 }
+
+export function setMenuState(menuState) {
+	return {
+		type: 'SET_MENU',
+		menuState
+	}
+}
