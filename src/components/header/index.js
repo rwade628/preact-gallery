@@ -5,19 +5,23 @@ import Drawer from 'preact-material-components/Drawer';
 import List from 'preact-material-components/List';
 import Dialog from 'preact-material-components/Dialog';
 import Switch from 'preact-material-components/Switch';
+import Button from 'preact-material-components/Button';
+import Menu from 'preact-material-components/Menu'
 import 'preact-material-components/Switch/style.css';
 import 'preact-material-components/Dialog/style.css';
 import 'preact-material-components/Drawer/style.css';
 import 'preact-material-components/List/style.css';
 import 'preact-material-components/Toolbar/style.css';
-// import style from './style';
+import 'preact-material-components/Menu/style.css';
+import 'preact-material-components/Button/style.css';
 
 export default class Header extends Component {
+	componentDidMount() {
+		document.body.classList.add('mdc-theme--dark');
+		document.getElementById('outer').classList.add('mdc-theme--dark');
+	}
 	closeDrawer() {
 		this.drawer.MDComponent.open = false;
-		this.state = {
-			darkThemeEnabled: false
-		};
 	}
 
 	openDrawer = () => (this.drawer.MDComponent.open = true);
@@ -36,25 +40,36 @@ export default class Header extends Component {
 	goToMyProfile = this.linkTo('/profile');
 	goToGallery = this.linkTo('/albums')
 
-	toggleDarkTheme = () => {
-		this.setState(
-			{
-				darkThemeEnabled: !this.state.darkThemeEnabled
-			},
-			() => {
-				if (this.state.darkThemeEnabled) {
-					document.body.classList.add('mdc-theme--dark');
-					document.getElementById('outer').classList.add('mdc-theme--dark');
-				}
-				else {
-					document.body.classList.remove('mdc-theme--dark');
-					document.getElementById('outer').classList.remove('mdc-theme--dark');
-				}
-			}
-		);
-	}
-
 	render() {
+		// let toolbarOption
+		// switch(this.props.location.pathname) {
+		//     case '/':
+		//         toolbarOption = <Toolbar.Icon onClick={this.openSettings}>settings</Toolbar.Icon>
+		//         break;
+		//     case '/gallery':
+		//         toolbarOption = `
+		// 			<Menu.Anchor>
+		// 				<Toolbar.Icon settings onClick={e => {
+		// 					this.menu.MDComponent.open = true;
+		// 				}}
+		// 				>
+		// 					settings
+		// 				</Toolbar.Icon>
+		// 				<Menu
+		// 					ref={menu => {
+		// 					  this.menu = menu;
+		// 					}}
+		// 					>
+		// 					<Menu.Item>Hello1</Menu.Item>
+		// 					<Menu.Item>Hello2</Menu.Item>
+		// 					<Menu.Item>Hello3</Menu.Item>
+		// 				</Menu>
+		// 	        </Menu.Anchor>`
+		//         break;
+		//     default:
+		// 		toolbarOption = `<Toolbar.Icon onClick={this.openSettings}>settings</Toolbar.Icon>`
+		// }
+
 		return (
 			<div>
 				<Toolbar className="toolbar">
@@ -64,9 +79,6 @@ export default class Header extends Component {
 								menu
 							</Toolbar.Icon>
 							<Toolbar.Title>Preact app</Toolbar.Title>
-						</Toolbar.Section>
-						<Toolbar.Section align-end onClick={this.openSettings}>
-							<Toolbar.Icon>settings</Toolbar.Icon>
 						</Toolbar.Section>
 					</Toolbar.Row>
 				</Toolbar>
