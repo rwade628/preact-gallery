@@ -25,7 +25,7 @@ export default class AlbumGallery extends Component {
 	render({albums}) {
 		return (
 			<div>
-				<Gallery photos={albums} onClick={this.onClick} showDescription={true}/>
+				<Gallery photos={albums} onClick={this.onClick} showDescription={true} paginate={true}/>
 			</div>
 		)
 	}

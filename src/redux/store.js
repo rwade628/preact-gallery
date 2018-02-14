@@ -20,6 +20,10 @@ let ACTIONS = {
 	SET_MENU: ({menu, ...state}, {menuState}) => ({
 		menu: menuState,
 		...state
+	}),
+	CHANGE_PAGE: ({visibleItems, ...state}, {newVisibleItems}) => ({
+		visibleItems: newVisibleItems,
+		...state
 	})
 };
 
@@ -27,6 +31,7 @@ const INITIAL = {
 	gallery: [],
 	albums: [],
 	selected: {},
+	visibleItems: [],
 	menu: 'root'
 };
 

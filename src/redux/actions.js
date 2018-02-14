@@ -2,11 +2,9 @@ export function getGallery(selectedLocation, selectedGallery) {
 	return (dispatch, getState) => {
 	    return new Promise((resolve, reject) => {
 			var url = `/api/gallery/${selectedLocation}/${selectedGallery}`
-			console.log('url', url)
 			fetch(url).then((response) => {
 				return response.json()
 			}).then((json) => {
-				console.log('dispatching', json)
 				dispatch({
 					type: 'GET_GALLERY',
 					selectedGallery: json
@@ -28,7 +26,6 @@ export function getAlbums(album) {
 			fetch(url).then((response) => {
 				return response.json()
 			}).then((json) => {
-				console.log('dispatching', json)
 				dispatch({
 				  type    : 'GET_ALBUMS',
 				  albumList : json
@@ -53,5 +50,12 @@ export function setMenuState(menuState) {
 	return {
 		type: 'SET_MENU',
 		menuState
+	}
+}
+
+export function onChangePage(newVisibleItems) {
+	return {
+		type: 'CHANGE_PAGE',
+		newVisibleItems
 	}
 }

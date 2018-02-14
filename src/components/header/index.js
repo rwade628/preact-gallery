@@ -71,7 +71,7 @@ export default class Header extends Component {
 	goToGallery = this.linkTo('/albums')
 
 	getMenuOption = () => {
-		console.log(this.props.menu)
+		//console.log(this.props.menu)
 		switch(this.props.menu) {
 		    case 'root':
 		        return <Toolbar.Icon onClick={this.openSettings}>settings</Toolbar.Icon>
