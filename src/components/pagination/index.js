@@ -44,8 +44,6 @@ class Pagination extends Component {
  
         // get new page of items from items array
         var pageOfItems = items.length > 1 ? items.slice(pager.startIndex, pager.endIndex + 1) : [];
-
-        console.log('pageOfItems', pageOfItems)
  
         // update state
         this.setState({ pager: pager });

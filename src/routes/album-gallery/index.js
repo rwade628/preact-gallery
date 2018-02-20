@@ -19,13 +19,14 @@ export default class AlbumGallery extends Component {
 	}
 
 	onClick(event, obj) {
+		this.props.setLastPage(this.props.currentPage)
 		route(`/gallery/images/${this.props.albums[obj.index].name}`);
 	}
 
 	render({albums}) {
 		return (
 			<div>
-				<Gallery photos={albums} onClick={this.onClick} showDescription={true} paginate={true}/>
+				<Gallery photos={albums} onClick={this.onClick} showDescription={true} initialPage={this.props.lastPage}/>
 			</div>
 		)
 	}

@@ -8,6 +8,8 @@ import Pagination from '../../components/pagination';
 import Photo from './Photo';
 import { computeSizes } from './utils';
 
+import { v4 } from 'uuid';
+
 @connect(reduce, actions)
 class Gallery extends Component {
 	constructor() {
@@ -62,10 +64,10 @@ class Gallery extends Component {
 	    // subtract 1 pixel because the browser may round up a pixel
 	    const width = this.state.containerWidth - 1;
     	const { visibleItems, photos, columns, margin, onClick, onLoad } = this.props;
-    	const thumbs = computeSizes({ width, columns, margin, photos: visibleItems });
+    	let thumbs = computeSizes({ width, columns, margin, photos: visibleItems });
 	    return (
 	    	<div>
-		    	<Pagination items={photos} />
+		    	<Pagination items={photos} initialPage={this.props.initialPage}/>
 		    	<div className="react-photo-gallery--gallery">
 			    	<div ref={c => (this._gallery = c)}>
 				    	{thumbs.map((photo, index) => {
@@ -76,7 +78,7 @@ class Gallery extends Component {
 				    		};
 				    		return (
 				    			<ImageComponent
-					    			key={photo.key || photo.src}
+					    			key={v4()}
 					    			margin={margin}
 					    			index={index}
 					    			photo={photo}
@@ -102,7 +104,7 @@ Gallery.defaultProps = {
 	columns: 3,
 	margin: 2,
 	showDescription: false,
-	paginate: false,
+	initialPage: 1,
 };
 
 export default Gallery;

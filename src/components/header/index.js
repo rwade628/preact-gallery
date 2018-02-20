@@ -62,6 +62,7 @@ export default class Header extends Component {
 	dialogRef = dialog => (this.dialog = dialog);
 
 	linkTo = path => () => {
+		this.props.setLastPage(1)
 		route(path);
 		this.closeDrawer();
 	};
@@ -116,14 +117,16 @@ export default class Header extends Component {
 								<List.ItemIcon>camera</List.ItemIcon>
 								Albums
 							</List.LinkItem>
-							<List.LinkItem onClick={this.goToMovies}>
-								<List.ItemIcon>videocam</List.ItemIcon>
-								Movies
-							</List.LinkItem>
-							<List.LinkItem onClick={this.goToOther}>
-								<List.ItemIcon>camera</List.ItemIcon>
-								Other
-							</List.LinkItem>
+							{
+								/* <List.LinkItem onClick={this.goToMovies}>
+									<List.ItemIcon>videocam</List.ItemIcon>
+									Movies
+								</List.LinkItem>
+								<List.LinkItem onClick={this.goToOther}>
+									<List.ItemIcon>camera</List.ItemIcon>
+									Other
+								</List.LinkItem> */
+							}
 						</List>
 					</Drawer.TemporaryDrawerContent>
 				</Drawer.TemporaryDrawer>

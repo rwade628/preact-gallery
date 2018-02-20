@@ -54,10 +54,16 @@ export function setMenuState(menuState) {
 }
 
 export function onChangePage(newVisibleItems, newCurrentPage) {
-	console.log('newCurrentPage', newCurrentPage)
 	return {
 		type: 'CHANGE_PAGE',
 		newVisibleItems,
 		newCurrentPage
+	}
+}
+
+export function setLastPage(currentPage) {
+	return {
+		type: 'LAST_PAGE',
+		currentPage
 	}
 }

@@ -25,6 +25,10 @@ let ACTIONS = {
 		visibleItems: newVisibleItems,
 		currentPage: newCurrentPage,
 		...state
+	}),
+	LAST_PAGE: ({lastPage, ...state}, {currentPage}) => ({
+		lastPage: currentPage,
+		...state
 	})
 };
 
@@ -34,6 +38,7 @@ const INITIAL = {
 	selected: {},
 	visibleItems: [],
 	currentPage: 1,
+	lastPage: 1,
 	pageSize: 9,
 	menu: 'root'
 };

@@ -17,7 +17,6 @@ export default class PhotoGallery extends Component {
 	}
 
 	componentDidMount() {
-		console.log('mounting?')
 		this.props.getGallery(this.props.location, this.props.name)
 	}
 
