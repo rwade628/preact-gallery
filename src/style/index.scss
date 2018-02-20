@@ -73,7 +73,7 @@ div.description{
 p.description_content{
   padding:10px;
   margin:0px;
-  font-size: 2em;
+  font-size: 1em;
 }
 
 #preview {
@@ -146,4 +146,8 @@ p.description_content{
     font-size: 24px;
     padding: 8px;
   }
+}
+
+.ril-image-current {
+  will-change: transform;
 }

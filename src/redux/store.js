@@ -21,8 +21,9 @@ let ACTIONS = {
 		menu: menuState,
 		...state
 	}),
-	CHANGE_PAGE: ({visibleItems, ...state}, {newVisibleItems}) => ({
+	CHANGE_PAGE: ({visibleItems, currentPage, ...state}, {newVisibleItems, newCurrentPage}) => ({
 		visibleItems: newVisibleItems,
+		currentPage: newCurrentPage,
 		...state
 	})
 };
@@ -32,6 +33,8 @@ const INITIAL = {
 	albums: [],
 	selected: {},
 	visibleItems: [],
+	currentPage: 1,
+	pageSize: 9,
 	menu: 'root'
 };
 

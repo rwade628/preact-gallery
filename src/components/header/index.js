@@ -68,10 +68,11 @@ export default class Header extends Component {
 
 	goHome = this.linkTo('/');
 	goToMyProfile = this.linkTo('/profile');
-	goToGallery = this.linkTo('/albums')
+	goToGallery = this.linkTo('/albums/images')
+	goToMovies = this.linkTo('/albums/movies')
+	goToOther = this.linkTo('/albums/other')
 
 	getMenuOption = () => {
-		//console.log(this.props.menu)
 		switch(this.props.menu) {
 		    case 'root':
 		        return <Toolbar.Icon onClick={this.openSettings}>settings</Toolbar.Icon>
@@ -114,6 +115,14 @@ export default class Header extends Component {
 							<List.LinkItem onClick={this.goToGallery}>
 								<List.ItemIcon>camera</List.ItemIcon>
 								Albums
+							</List.LinkItem>
+							<List.LinkItem onClick={this.goToMovies}>
+								<List.ItemIcon>videocam</List.ItemIcon>
+								Movies
+							</List.LinkItem>
+							<List.LinkItem onClick={this.goToOther}>
+								<List.ItemIcon>camera</List.ItemIcon>
+								Other
 							</List.LinkItem>
 						</List>
 					</Drawer.TemporaryDrawerContent>

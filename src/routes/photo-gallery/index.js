@@ -4,30 +4,28 @@ import reduce from '../../redux/reducers';
 import * as actions from '../../redux/actions';
 
 import Gallery from '../../components/gallery'
-import Preview from '../../components/preview'
-import Item from '../../components/item'
+import Lightbox from 'react-image-lightbox';
 
 @connect(reduce, actions)
 export default class PhotoGallery extends Component {
 	constructor() {
 		super();
 		this.onClick = this.onClick.bind(this);
+	    this.closeLightbox = this.closeLightbox.bind(this);
+	    this.moveNext = this.moveNext.bind(this);
+	    this.movePrev = this.movePrev.bind(this);
 	}
 
 	componentDidMount() {
-		this.props.getGallery(this.props.name)
+		console.log('mounting?')
+		this.props.getGallery(this.props.location, this.props.name)
 	}
 
 	onClick = (event, obj) => {
-		console.log('clicked', this.props.gallery[obj.index])
-		this.props.setSelected({
-			image: this.props.gallery[obj.index],
-			index: obj.index
-		})
+		this.setState({ isOpen: true, index: obj.index });
 	}
 
 	hide = () => {
-		console.log('hiding')
 		this.props.setSelected({});
 	}
 
@@ -52,14 +50,45 @@ export default class PhotoGallery extends Component {
 		});
 	}
 
+	openLightbox() {
+		this.setState({ isOpen: true });
+	}
+
+	closeLightbox() {
+		this.setState({ isOpen: false });
+	}
+
+	moveNext() {
+		this.setState({ index: (this.state.index + 1) % this.props.gallery.length });
+	}
+
+	movePrev() {
+		this.setState({
+			index: (this.state.index + this.props.gallery.length - 1) % this.props.gallery.length,
+		});
+	}
+
 	render({gallery}) {
 		let image = this.props.selected ? this.props.selected.image : {}
+		let lightbox;
+	    if (this.state.isOpen) {
+			lightbox = (
+				<Lightbox
+					mainSrc={this.props.gallery[this.state.index].src}
+					nextSrc={this.props.gallery[(this.state.index + 1) % this.props.gallery.length].src}
+					prevSrc={
+						this.props.gallery[(this.state.index + this.props.gallery.length - 1) % this.props.gallery.length].src
+					}
+					onCloseRequest={this.closeLightbox}
+					onMovePrevRequest={this.movePrev}
+					onMoveNextRequest={this.moveNext}
+				/>
+			);
+	    }
 		return (
 			<div>
 				<Gallery photos={gallery} onClick={this.onClick} />
-				<Preview onSwipe={this.onSwipe}>
-					<Item image={image} hide={this.hide} onSwipe={this.onSwipe}/>
-				</Preview>
+				{lightbox}
 			</div>
 		)
 	}

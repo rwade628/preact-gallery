@@ -14,12 +14,12 @@ export default class AlbumGallery extends Component {
 	}
 
 	componentDidMount() {
-		this.props.getAlbums('images');
+		this.props.getAlbums(this.props.location);
 		this.props.setMenuState('gallery')
 	}
 
 	onClick(event, obj) {
-		route(`/gallery/${this.props.albums[obj.index].name}`);
+		route(`/gallery/images/${this.props.albums[obj.index].name}`);
 	}
 
 	render({albums}) {

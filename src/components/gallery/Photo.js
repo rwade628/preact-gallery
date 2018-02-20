@@ -27,6 +27,7 @@ class Photo extends Component {
 				<img
 				style={onClick ? { ...imgStyle, ...imgWithClick } : imgStyle}
 				{...photo}
+				src={photo.thumbnail ? photo.thumbnail : photo.src}
 				onClick={onClick ? this.handleClick : null}
 				onLoad={onLoad ? this.handleLoad : null}
 				/>

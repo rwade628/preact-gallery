@@ -43,7 +43,7 @@ class Pagination extends Component {
         pager = this.getPager(items.length, page);
  
         // get new page of items from items array
-        var pageOfItems = items.slice(pager.startIndex, pager.endIndex + 1);
+        var pageOfItems = items.length > 1 ? items.slice(pager.startIndex, pager.endIndex + 1) : [];
 
         console.log('pageOfItems', pageOfItems)
  
@@ -51,7 +51,7 @@ class Pagination extends Component {
         this.setState({ pager: pager });
  
         // call change page function in parent component
-        this.props.onChangePage(pageOfItems);
+        this.props.onChangePage(pageOfItems, pager.currentPage);
     }
  
     getPager(totalItems, currentPage, pageSize) {
@@ -59,7 +59,7 @@ class Pagination extends Component {
         currentPage = currentPage || 1;
  
         // default page size is 10
-        pageSize = pageSize || 10;
+        pageSize = this.props.pageSize || 10;
  
         // calculate total pages
         var totalPages = Math.ceil(totalItems / pageSize);
@@ -128,8 +128,8 @@ class Pagination extends Component {
                     <i class="material-icons" onClick={() => this.setPage(pager.currentPage - 1)}>keyboard_arrow_left</i>
                 </li>
                 {pager.pages.map((page, index) =>
-                    <li key={index} className={`pagination-number ${pager.currentPage === page ? 'current-number' : ''}`}>
-                        <a onClick={() => this.setPage(page)}>{page}</a>
+                    <li key={index} onClick={() => this.setPage(page)} className={`pagination-number ${pager.currentPage === page ? 'current-number' : ''}`}>
+                        {page}
                     </li>
                 )}
                 <li className={`pagination-arrow arrow-right ${pager.currentPage === 1 ? 'disabled' : ''}`}>

@@ -40,14 +40,13 @@ export default class Preview extends Component {
 	}
 
 	onSwipe = (direction) => {
-		console.log('direction', direction)
 		if (this.props.onSwipe) {
 			this.props.onSwipe(direction);
 		}
 	}
 
 	render({selected}) {
-		const visible = selected.hasOwnProperty('image') ? 'visible' : ''
+		const visible = selected.hasOwnProperty('image') || selected.hasOwnProperty('video') ? 'visible' : ''
 		return (
 			<div id="preview" className={visible} ref={(el) => this.container = el}>
 				{this.props.children}

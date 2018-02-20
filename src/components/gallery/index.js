@@ -21,7 +21,7 @@ class Gallery extends Component {
 	}
 
 	componentDidMount() {
-		this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
+		//this.setState({ containerWidth: Math.floor(this._gallery.clientWidth) });
 		window.addEventListener('resize', this.handleResize);
 	}
 
@@ -41,6 +41,7 @@ class Gallery extends Component {
 
 	handleClick(event, { index }) {
 		const { photos, onClick } = this.props;
+		index = this.props.currentPage > 1 ? (((this.props.currentPage - 1) * this.props.pageSize) + index) : index
 		onClick(event, {
 			index,
 			photo: photos[index],
